@@ -25,14 +25,14 @@ const login = async (e) => {
     );
 
     notify.success(data.message);
-    console.log(data)
+    // console.log(data)
 
     localStorage.setItem("authTaken",data.token)
     
-  //  setTimeout(()=>{    
-  //   location.href = "app/dashboard.html"
+   setTimeout(()=>{    
+    location.href = "app/dashboard.html"
 
-  //   },2000)
+    },2000)
 
    
 

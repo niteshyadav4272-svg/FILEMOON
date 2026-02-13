@@ -32,6 +32,7 @@ const upload = multer({storage: storage})
 const { signup, login } = require("./controller/user.controller")
 const { createFile, fetchFiles, DeleteFiles, download} = require("./controller/file.controller")
 const { fetchDashboard } = require("./controller/dashboard.controller")
+const { verfifyToken } = require("./controller/token.controller")
 const app = express()
 app.listen(process.env.PORT || 8080)
 
@@ -49,4 +50,4 @@ app.get("/file",fetchFiles)
 app.delete("/file/:id",DeleteFiles)
 app.get('/file/download/:id',download)
 app.get("/dashboard",fetchDashboard)
-  
+app.post('/token/verify',verfifyToken)  

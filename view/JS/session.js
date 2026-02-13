@@ -16,11 +16,28 @@
 // getSession()
 
 
-const getSession = ()=>{
-    const session = localStorage.getItem("authToken")
+const getSession =async ()=>{
+  try{
+      const session = localStorage.getItem("authToken")
 
     if(!session){
         location.href = "../index.html"
+        return
     }
-    if(session !== )
+    const payload = {
+        token : session
+    }
+
+   const {data}  =  await  axios.post('http://localhost:8080/signup',payload)
+   console.log(data)
+
+  }
+  catch(err){
+    localStorage.clear()
+    location.href = "../index.html"
+
+
+  }
+   
+
 }
