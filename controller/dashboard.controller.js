@@ -20,7 +20,7 @@ const fetchDashboard =async (req,res)=>{
                 }
         }
        ])
-       res.status(500).json(reports)
+       res.status(200).json(reports)
 
     }
     catch(err){

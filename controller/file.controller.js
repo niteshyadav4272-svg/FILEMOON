@@ -2,36 +2,47 @@ const FileModel = require("../model/file.model");
 const fs = require("fs")
 const path = require("path")
 
+const getType = (type)=>{
+    const ext = type.split("/").pop()
+
+    if(ext ==="x-msdownload") return "application/exe"
+
+    return type
+    
+    }
+
+
 const createFile  = async (req,res)=>{
    try{
-    
+   const {filename} = req.body
     const file  = req.file
-
+    
     const payload  = {
-        // filename: `${file.destination}${file.filename}`,
+      
         path :(file.destination+file.filename),
-        filename:file.filename,
-        type : file.mimetype.split("/")[0],
-        size: file.size
-        // ye jo information hai ye sub (req.file ) se aya hai 
+         filename:filename,
+        type : getType(file.mimetype),
+        size: file.size,
+         user : req.user.id
     }
-    //  console.log(req.file) ye file ka pura data de dega jo store huva hai 
  const newFile  =   await  FileModel.create(payload)
  res.status(200).json(newFile)
 
 
    }
    catch(err){
-    res.status(500).json('kya bhai kya haal hai ')
+    res.status(500).json({message:err.message})
    }
 
 }
 
 const fetchFiles = async(req,res)=>{
     try{
-        //
-       const files = await FileModel.findOne()
+         const {limit}  = req.query
+       const files = await FileModel.find({user:req.user.id}).sort({createdAt:-1}).limit(limit)
        res.status(200).json(files)
+      
+       console.log(files)
 
     }
     catch(err){
@@ -42,12 +53,13 @@ const fetchFiles = async(req,res)=>{
 
 const DeleteFiles = async(req,res)=>{
     try{
+      
         const {id}  =  req.params
        const file = await FileModel.findByIdAndDelete(id)
+       
        if(!file) return res.status(404).json({message:"file not found"})
         
         fs.unlinkSync(file.path) 
-      
 
        res.status(200).json(file)
 
@@ -63,30 +75,24 @@ const download = async(req,res)=>{
         
         const {id} = req.params
    const file   =  await  FileModel.findById(id)
-//    res.status(200).json(file)  isshe pta ki file ka path kisme me hai
-
+   const ext = file.type.split("/").pop()
  if(!file){
       return   res.status(404).json({message:"file not found"})
        }
-
        const root  = process.cwd()
      const filePath =   path.join(root,file.path)
 
-//     res.setHeader("Content-Disposition", "attachment; filename= `${file.filename}`");
-//   res.setHeader("Content-Type", "image/jpg"); //this is a optional
-
 res.setHeader(
   "Content-Disposition",
-  `attachment; filename="${file.filename}"`
+  `attachment; filename="${file.filename}.${ext}"`
 );
-
 
      res.sendFile(filePath,(err)=>{
         if(err)
             // console.log(err)
         res.status(404).json({message:"file not found"})
      })
-    }
+    } 
     catch(err){
         res.status(500).json({message:err.message})
     }

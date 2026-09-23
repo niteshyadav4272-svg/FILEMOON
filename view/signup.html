@@ -21,8 +21,8 @@
 
 </head>
 <body >
-    <div class="bg-gray-200 min-h-screen flex  justify-center items-center animate_animated animate_fadeIn">
-        <div class="p-8 w-[420px] bg-white rounded-xl flex items-center flex-col gap-8 animate_animated animate__bounce">
+    <div class="bg-gray-200 min-h-screen flex  justify-center items-center animate__animated animate__pulse">
+        <div class="p-8 w-[420px]  bg-white rounded-xl flex items-center flex-col gap-8 animate_animated animate__bounce">
 
         <div class="flex items-center gap-2">
               <i class="ri-contrast-2-fill text-6xl  text-violet-700"></i>
@@ -31,18 +31,20 @@
         </div>
 
         <form  class="w-full space-y-6" onsubmit="signup(event)" >
+
+            <!-- fulname -->
              <div class="space-y-1">
-            
                 <label class="text-gray-500 text-[17px]  block">Fullname</label>
                  <input
-                 name="fullname"
+             name="fullname"
              class="p-3 rounded border border-gray-300 w-full"
               placeholder="Nitesh yadav" 
               required
                type="text"/>
-
+               </div>
+               
+               <!-- mobile  -->     
                 <div class="space-y-1">
-            
                 <label class="text-gray-500 text-[17px]  block">Mobile</label>
                  <input
                  name="mobile"
@@ -50,13 +52,11 @@
               placeholder="123456789" 
               required
                type="number" />
-
             </div>
 
-            </div>
-
-            <div class="space-y-1">
             
+             <!-- email -->
+            <div class="space-y-1">
                 <label class="text-gray-500 text-[17px]  block">Email</label>
                  <input
                  name="email"
@@ -64,9 +64,9 @@
               placeholder="email@gmail.com" 
               required
                type="email" />
-
             </div>
            
+            <!-- password -->
              <div class="space-y-1">
                 <label class="text-gray-500 text-[17px]  block">password</label>
                  <input
@@ -75,7 +75,6 @@
               placeholder="*********" 
               required
                type="password" />
-
             </div>
            
            <button class="p-3 rounded border border-gray-500 w-full bg-violet-300 text-white-lg font-medium hover:bg-violet-600 ">sign up</button>
@@ -89,6 +88,8 @@
         
 
     </div>
+    <script src="JS/env.js"></script>
+    <script src="JS/session.js"></script>
     <script src="JS/signup.js"></script>
 </body>
 </html>

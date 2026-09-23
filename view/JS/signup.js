@@ -1,9 +1,19 @@
+ axios.defaults.baseURL = SERVER
  const notify =   new Notyf({
       position:{
         x:'center',
         y: 'top'
       }
      })
+
+ const checkSession =async ()=>{
+const session = await  getSession()
+
+if(session){
+  location.href = "/dashboard"
+}
+}
+checkSession()
 
 const signup =async (e)=>{
     try{
@@ -18,21 +28,16 @@ const signup =async (e)=>{
 
   }
 
-    const {data}  = await  axios.post('http://localhost:8080/signup',payload)
-    form.reset()
-    // console.log(response)
+    const {data}  = await  axios.post('/api/signup',payload)
+    form.reset() 
     notify.success(data.message)
+
     setTimeout(()=>{
-      location.href = "index.html"
-
+       location.href = "/login"
     },2000)
-   
-
     }
-
     catch(err){
-        // console.log(err.response.data.message)
-    
+
      notify.error(err.response  ? err.response.data.message : err.message)
     }
    

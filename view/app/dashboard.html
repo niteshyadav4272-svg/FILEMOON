@@ -1,146 +1,158 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <link
-  href="https://cdn.jsdelivr.net/npm/remixicon@4.9.0/fonts/remixicon.css"
-  rel="stylesheet"
-/>
- <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
-  />
-      <script src="https://unpkg.com/axios@1.13.2/dist/axios.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.9.0/fonts/remixicon.css" rel="stylesheet" />
 
-  <script src="../JS/session.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <script src="https://unpkg.com/axios@1.13.2/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
 
+    <!-- moment cdn -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/moment.min.js"></script>
+
+    <!-- sweetalert -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 </head>
-<body >
+
+<body>
 
     <div class="bg-gray-100 h-screen">
-        <aside class="space-y-6  bg-linear-to-r from-cyan-500 to-blue-500  fixed top-0 left-0 h-full" id="sidebar"  style="width:250px; transition: 0.3s; ">
+        <aside class="space-y-6  bg-linear-to-r from-cyan-500 to-blue-500  fixed top-0 left-0 h-full" id="sidebar"
+            style="width:250px; transition: 0.3s; ">
+
+            <!-- photo fullname email -->
             <div class="flex flex-col  items-center">
-                <img src="../JS/k.png" width="80" alt="">
-                <h1 class="text-lg font-medium text-white"> Nitesh Yadav </h1>
-                <p class="text-sm text-gray-100 ">niteshyadav4272@gmail.com</p>
+                <img src="../JS/k.png" id="pic" onclick="uploadImage()"
+                    class="w-[80px] h-[80px] rounded-full object-cover">
+                <h1 class="text-lg font-medium text-white capitalize" id="fullname"> </h1>
+                <p class="text-sm text-gray-100 " id="email"></p>
             </div>
+            <!-- photo fullname email end -->
+
 
             <div class="px-6 flex flex-col gap-4">
-                <a href="./dashboard.html">
+
+                <!-- dashboard start  -->
+                <a href="/dashboard">
                     <button class="w-full bg-rose-400 text-white py-2.5 rounded-[4px] hover:bg-rose-600 ">
-                       <i class="ri-apps-line"></i>
-                        <label  >Dashboard</label>
+                        <i class="ri-apps-line"></i>
+                        <label>Dashboard</label>
+                    </button>
+                </a>
+                <!-- dashboard end  -->
+
+
+                <!--files start  -->
+                <a href="/files">
+                    <button class="w-full bg-rose-400 text-white py-2.5 rounded-[4px] hover:bg-rose-600 ">
+                        <i class="ri-file-line"></i>
+                        <label>My Files</label>
 
                     </button>
                 </a>
+                <!--files end  -->
 
-                 <a href="./my-files.html">
+
+                <!-- history start -->
+                <a href="/history">
                     <button class="w-full bg-rose-400 text-white py-2.5 rounded-[4px] hover:bg-rose-600 ">
-                       <i class="ri-file-line"></i>
-                        <label  >My Files</label>
+                        <i class="ri-history-line"></i>
+                        <label>History</label>
 
                     </button>
                 </a>
+                <!-- history end -->
 
-                 <a href="./history.html">
-                    <button class="w-full bg-rose-400 text-white py-2.5 rounded-[4px] hover:bg-rose-600 ">
-                       <i class="ri-history-line"></i>
-                        <label  >History</label>
+                <!-- logout button -->
+                <button class="w-full bg-rose-400 text-white py-2.5 rounded-[4px] hover:bg-rose-600 "
+                    onclick="logout()">
+                    <i class="ri-logout-circle-r-line"></i>
+                    <label>Logout</label>
+                </button>
+                <!-- logout button end -->
 
-                    </button>
-                </a>
-                 <button class="w-full bg-rose-400 text-white py-2.5 rounded-[4px] hover:bg-rose-600 ">
-                       <i class="ri-logout-circle-r-line"></i>
-                        <label >Logout</label>
-
-                    </button>
             </div>
 
         </aside>
 
-        <section  id="section"  style="margin-left: 250px; transition: 0.3s;">
-            <nav class="bg-white px-6 py-4  w-full shadow-lg flex justify-between items-center">
-                  <div class="flex items-center gap-2">
-              <i class="ri-contrast-2-fill text-4xl  text-violet-700"></i>
-              <h1 class="text-2xl font-semibold ">filemoon</h1>
+        <section id="section" style="margin-left: 250px; transition: 0.3s;">
 
-        </div>
-        <div class="space-x-2">
-             <button class="bg-gray-100 px-3 py-2 rounded hover:bg-gray-200" >
-            <i class="ri-logout-circle-r-line"></i>
-           </button>
-           <button class="bg-gray-100 px-3 py-2 rounded hover:bg-gray-200" onclick="toggleSidebar()">
-            <i class="ri-menu-2-line"></i>
-           </button> 
-        </div>
+            <!-- nav tag start  -->
+            <nav class="bg-white px-6 py-4  w-full shadow-lg flex justify-between items-center">
+
+                <!-- first div -->
+                <div class="flex items-center gap-2">
+                    <i class="ri-contrast-2-fill text-4xl  text-violet-700"></i>
+                    <h1 class="text-2xl font-semibold ">filemoon</h1>
+                </div>
+                <!-- first div end -->
+
+                <!-- second div  -->
+                <div class="space-x-2">
+                    <button class="bg-gray-100 px-3 py-2 rounded hover:bg-gray-200" onclick="logout()">
+                        <i class="ri-logout-circle-r-line"></i>
+                    </button>
+                    <button class="bg-gray-100 px-3 py-2 rounded hover:bg-gray-200" onclick="toggleSidebar()">
+                        <i class="ri-menu-2-line"></i>
+                    </button>
+                </div>
+                <!-- second div end -->
 
             </nav>
-         
+
             <div class="p-6 space-y-4">
-              <h1 class="text-lg font-medium">Dashboard</h1>
-               <div class="grid grid-cols-4 gap-2">
-                <div class=" overflow-hidden relative bg-white rounded-lg shadow hover:shadow-lg h-40  flex items-center justify-center flex-col">
-                    <h1 class="text-xl font-semibold text-gray-500">Videos</h1>
-                    <p class="text-2xl font-bold ">25609</p>
-                    <div 
-                    class= "w-[100px] h-[100px] rounded-full absolute top-7 -left-5 flex justify-center items-center"
-                    style ="background-image: linear-gradient(to right, #b8cbb8 0%, #b8cbb8 0%, #b465da 0%, #cf6cc9 33%, #ee609c 66%, #ee609c 100%);"
-                     >
-                     <i class="ri-live-line text-4xl text-white"></i>
-                </div>
-                </div> 
-                 <div class=" overflow-hidden relative bg-white rounded-lg shadow hover:shadow-lg h-40  flex items-center justify-center flex-col">
-                    <h1 class="text-xl font-semibold text-gray-500">Audios</h1>
-                    <p class="text-2xl font-bold ">25609</p>
-                    <div 
-                    class= "w-[100px] h-[100px] rounded-full absolute top-7 -left-5 flex justify-center items-center"
-                      style = "background-image: linear-gradient(to right, #6a11cb 0%, #2575fc 100%);"                     >
-                     <i class="ri-folder-music-line text-4xl text-white"></i>
-                </div>
+                <h1 class="text-lg font-medium">Dashboard</h1>
 
-                </div> 
-                 <div class=" overflow-hidden relative bg-white rounded-lg shadow hover:shadow-lg h-40  flex items-center justify-center flex-col">
-                    <h1 class="text-xl font-semibold text-gray-500">PDF</h1>
-                    <p class="text-2xl font-bold ">25609</p>
-                    <div 
-                    class= "w-[100px] h-[100px] rounded-full absolute top-7 -left-5 flex justify-center items-center"
-                   style="background-image: linear-gradient(to right, #f83600 0%, #f9d423 100%);"                     >
-                     <i class="ri-file-pdf-2-line text-4xl text-white"></i>
+                <!-- box of grid  -->
+                <div id="report-card" class="grid grid-cols-4 gap-8 mb-8">
+
                 </div>
+                <!-- box of grid delete  -->
 
-                </div> 
-                 <div class=" overflow-hidden relative bg-white rounded-lg shadow hover:shadow-lg h-40  flex items-center justify-center flex-col">
-                    <h1 class="text-xl font-semibold text-gray-500">Images</h1>
-                    <p class="text-2xl font-bold ">25609</p>
-                    <div 
-                    class= "w-[100px] h-[100px] rounded-full absolute top-7 -left-5 flex justify-center items-center"
-                     style="background-image: linear-gradient(45deg, #874da2 0%, #c43a30 100%);"                      >
-                     <i class="ri-file-image-line text-4xl text-white"></i>
+
+                <div class="grid grid-cols-4 gap-2">
+
+
+                    <!-- recent  files box-->
+                    <div
+                        class="col-span-2 overflow-hidden relative bg-white rounded-lg shadow hover:shadow-lg  p-6  space-y-3">
+                        <h1 class="text-lg font-semibold text-black border-b pb-3 border-gray-200">Recent Files</h1>
+
+                        <div class="space-y-4" id="recent-files-box">
+
+                        </div>
+                    </div>
+
+                    <!--  recent shared box  -->
+                    <div
+                        class="col-span-2 overflow-hidden relative bg-white rounded-lg shadow hover:shadow-lg  p-6  space-y-3">
+                        <h1 class="text-lg font-semibold text-black border-b pb-3 border-gray-200">Recent shared</h1>
+
+                        <div class="space-y-4" id="recent-shared-box">
+
+
+                        </div>
+                    </div>
+
                 </div>
-
-                </div> 
-                
-                 <div class="col-span-2 overflow-hidden relative bg-white rounded-lg shadow hover:shadow-lg h-40 p-6 ">
-                    <h1 class="text-xl font-semibold text-gray-500">Recent Files</h1>
-                
-                </div> 
-
-                   <div class="col-span-2 overflow-hidden relative bg-white rounded-lg shadow hover:shadow-lg h-40 p-6 ">
-                    <h1 class="text-xl font-semibold text-gray-500">Recent shared</h1>
-                    
-                </div> 
-             </div>
-         </div>  
+            </div>
 
         </section>
 
     </div>
-
+    <script src="../JS/env.js"></script>
     <script src="../JS/layout.js"></script>
+    <script src="../JS/session.js"></script>
+    <script src="../JS/dashboard.js"></script>
 </body>
+
 </html>

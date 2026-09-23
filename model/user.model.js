@@ -3,6 +3,10 @@ const bcrypt = require("bcrypt");
 
 const userSchema = new Schema(
   {
+
+    image:{
+         type: String
+    },
     fullname: {
       type: String,
       trim: true,
@@ -35,9 +39,8 @@ const userSchema = new Schema(
   { timestamps: true }
 );
 
-/* ===============================
-   DUPLICATE MOBILE CHECK
-================================ */
+
+
 userSchema.pre("save", async function () {
   if (!this.isNew) return;
 
@@ -50,12 +53,9 @@ userSchema.pre("save", async function () {
   }
 });
 
-/* ===============================
-   DUPLICATE EMAIL CHECK
-================================ */
+
 userSchema.pre("save", async function () {
   if (!this.isNew) return;
-
   const count = await this.constructor.countDocuments({
     email: this.email,
   });
@@ -65,13 +65,11 @@ userSchema.pre("save", async function () {
   }
 });
 
-/* ===============================
-   PASSWORD ENCRYPTION
-================================ */
+
 userSchema.pre("save", async function () {
   if (!this.isModified("password")) return;
-
-  const encryptedPassword = await bcrypt.hash(this.password, 12);
+  
+  const encryptedPassword = await bcrypt.hash(this.password.toString(), 12);
   this.password = encryptedPassword;
 });
 

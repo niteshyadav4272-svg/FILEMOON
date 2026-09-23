@@ -4,9 +4,11 @@ dotenv.config()
 const mongoose  = require("mongoose")
 mongoose.connect(process.env.DB)
 
+const root = process.cwd()
 const express = require("express")
+const path = require("path")
 const {v4: uniqueId} = require("uuid")
-const cors = require("cors") // cors==1
+
 
 const multer = require("multer")
 const storage = multer.diskStorage({
@@ -16,38 +18,82 @@ const storage = multer.diskStorage({
     filename: (req, file, next)=>{
     const nameArr  =  file.originalname.split(".")
     const ext =  nameArr.pop()
-    //   const name =uniqueId()+"."+ext  // it is a old way to concat 
     const name  = `${uniqueId()}.${ext}`
     next(null,name)
-              
 
-        //const name = file.originalname pahle hamne origanl file ka name diya tha
-        // const name = uniqueId()  // ab ye unique name dega every time
-       
     } 
 })
-//const upload = multer({dest: 'files'})
-const upload = multer({storage: storage})
 
-const { signup, login } = require("./controller/user.controller")
+const upload = multer({
+   storage: storage,
+   limits :{
+      filesize : 200*100*1000
+   }
+})
+
+const { signup, login, updateImage, fetchImage } = require("./controller/user.controller")
 const { createFile, fetchFiles, DeleteFiles, download} = require("./controller/file.controller")
 const { fetchDashboard } = require("./controller/dashboard.controller")
 const { verfifyToken } = require("./controller/token.controller")
+const { shareFile, fetchShared} = require("./controller/share.controller")
+const AuthMiddleware = require("./middleware/auth.middleware")
 const app = express()
 app.listen(process.env.PORT || 8080)
 
+// middleware code 
 app.use(express.json())
 app.use(express.urlencoded({extended: false}))
 app.use(express.static("view"))
-app.use(cors({ // cors==2
-    origin: 'http://127.0.0.1:5500'
-}))
 
-app.post("/signup",signup)
-app.post("/login",login)
-app.post("/file", upload.single("file"), createFile)
-app.get("/file",fetchFiles)
-app.delete("/file/:id",DeleteFiles)
-app.get('/file/download/:id',download)
-app.get("/dashboard",fetchDashboard)
-app.post('/token/verify',verfifyToken)  
+
+
+// ui endpoint
+const getpath = (filename)=>{
+  return   path.join(root,"view",filename)
+}
+
+app.get("/signup",(req,res)=>{
+   res.sendFile(getpath("signup.html"))
+ 
+})
+app.get("/login",(req,res)=>{
+   res.sendFile(getpath("index.html"))
+ 
+})
+app.get("/",(req,res)=>{
+   res.sendFile(getpath("index.html"))
+ 
+})
+app.get("/dashboard",(req,res)=>{
+   res.sendFile(getpath("app/dashboard.html"))
+ 
+})
+
+app.get("/history",(req,res)=>{
+   res.sendFile(getpath("app/history.html"))
+ 
+})
+app.get("/files",(req,res)=>{
+   res.sendFile(getpath("app/files.html"))
+ 
+})
+
+
+// api endpoint 
+app.post("/api/signup",signup)
+app.post("/api/login",login)
+app.post("/api/profile-picture",AuthMiddleware,  upload.single("picture"),updateImage)
+app.get("/api/profile-picture",AuthMiddleware,fetchImage)
+app.post("/api/file",AuthMiddleware, upload.single("file"), createFile)
+app.get("/api/file",AuthMiddleware,fetchFiles)
+app.delete("/api/file/:id",AuthMiddleware,DeleteFiles)
+app.get('/api/file/download/:id',download)
+app.get("/api/dashboard",AuthMiddleware,fetchDashboard)
+app.post("/api/token/verify",verfifyToken)  
+app.post("/api/share",AuthMiddleware,shareFile)
+app.get("/api/share",AuthMiddleware,fetchShared)
+
+//not found
+app.use((req,res)=>{
+   res.status(404).json({message:"endpoint not found"})
+})
